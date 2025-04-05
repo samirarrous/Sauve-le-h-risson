@@ -29,7 +29,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public void pickUp(EnergyBoost energyBoost) {
-        System.out.println("The Player has pickup an item at the "+energyBoost.getPosition() + "Position");
+        System.out.println("The Player has pickup an item at the "+energyBoost.getPosition() + "Position ");
 
 
     }
