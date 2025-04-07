@@ -65,6 +65,10 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void update(long now) {
+
+        if(game.getStatus()!=Game.GameStatus.DEFEAT){
+
+
         if (moveRequested) {
             if (canMove(direction)) {
                 move(direction);
@@ -72,13 +76,21 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         }
         moveRequested = false;
         Decor decor = game.world().getGrid().get(getPosition());
-        if(game.getStatus()!=Game.GameStatus.VICTORY){
 
+        // Check if game is WON
+        if(game.getStatus()!=Game.GameStatus.VICTORY){
 
         if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
             System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
             game.setStatus(Game.GameStatus.VICTORY);
             System.out.println("Valeur actuelle de GameStatus : " + game.getStatus());
+        }
+        }
+
+        //Check if Game Is Loose
+        if(getEnergy()<=0){
+            game.setStatus(Game.GameStatus.DEFEAT);
+            System.out.println("Game is Loose :(");
         }
         }
     }
