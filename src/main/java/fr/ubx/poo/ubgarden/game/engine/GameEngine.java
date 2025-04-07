@@ -48,6 +48,7 @@
             this.gardener = game.getGardener();
             initialize();
             buildAndSetGameLoop();
+
         }
 
         public Pane getRoot() {

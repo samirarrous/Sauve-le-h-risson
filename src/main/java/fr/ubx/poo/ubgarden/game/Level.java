@@ -10,7 +10,7 @@ import fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashMap;
-
+//ici on ajoute les sprites
 public class Level implements Map {
 
     private final int level;
