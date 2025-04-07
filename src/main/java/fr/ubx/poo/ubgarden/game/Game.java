@@ -15,7 +15,21 @@ public class Game {
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
     }
+    public enum GameStatus {
+        RUNNING, VICTORY, DEFEAT
+    }
 
+    private GameStatus status = GameStatus.RUNNING;
+
+    public GameStatus status() {
+        return status;
+    }
+    public GameStatus getStatus(){
+        return this.status;
+    }
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
     public Configuration configuration() {
         return configuration;
     }
