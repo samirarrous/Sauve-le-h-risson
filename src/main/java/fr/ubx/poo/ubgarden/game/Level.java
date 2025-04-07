@@ -2,6 +2,8 @@ package fr.ubx.poo.ubgarden.game;
 
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.decor.Flowers;
+import fr.ubx.poo.ubgarden.game.go.decor.NestWasp;
 import fr.ubx.poo.ubgarden.game.go.decor.Tree;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
@@ -34,6 +36,14 @@ public class Level implements Map {
                         break;
                     case Tree:
                         decors.put(position, new Tree(position));
+                        break;
+                    case Flowers:
+                        decors.put(position, new Flowers(position));
+                        break;
+                    case NestWasp:
+
+                        decors.put(position, new Grass(position));
+                        decors.put(position, new NestWasp(position));
                         break;
                     case Apple: {
                         Decor grass = new Grass(position);

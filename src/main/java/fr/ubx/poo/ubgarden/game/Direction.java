@@ -6,7 +6,7 @@ package fr.ubx.poo.ubgarden.game;
 
 import java.util.Random;
 
-public enum Direction {
+public enum  Direction {
     UP {
         @Override
         public Position nextPosition(Position pos, int delta) {

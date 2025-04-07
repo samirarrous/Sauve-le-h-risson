@@ -6,6 +6,8 @@ package fr.ubx.poo.ubgarden.game.view;
 
 import fr.ubx.poo.ubgarden.game.go.GameObject;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
+import fr.ubx.poo.ubgarden.game.go.decor.Flowers;
+import fr.ubx.poo.ubgarden.game.go.decor.NestWasp;
 import fr.ubx.poo.ubgarden.game.go.decor.Tree;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import javafx.scene.layout.Pane;
@@ -21,6 +23,10 @@ public final class SpriteFactory {
             return new Sprite(layer, factory.get(GRASS), gameObject);
         if (gameObject instanceof Tree)
             return new Sprite(layer, factory.get(TREE), gameObject);
+        if (gameObject instanceof Flowers)
+            return new Sprite(layer, factory.get(FLOWERS), gameObject);
+        if (gameObject instanceof NestWasp)
+            return new Sprite(layer, factory.get(NESTWASP), gameObject);
         if (gameObject instanceof EnergyBoost)
             return new Sprite(layer, factory.get(APPLE), gameObject);
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);
