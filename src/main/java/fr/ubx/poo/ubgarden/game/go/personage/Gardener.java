@@ -50,8 +50,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public final boolean canMove(Direction direction) {
-        // TO UPDATE
-        return true;
+        Position nextPos = direction.nextPosition(getPosition());
+        return game.world().getGrid().inside(nextPos);
     }
 
     @Override
