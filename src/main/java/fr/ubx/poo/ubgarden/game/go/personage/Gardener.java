@@ -17,6 +17,7 @@ import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 
 public class Gardener extends GameObject implements Movable, PickupVisitor, WalkVisitor {
 
+    private int actualLevel=1;
     private final int energy;
     private Direction direction;
     private boolean moveRequested = false;
@@ -100,6 +101,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
             System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
             game.setStatus(Game.GameStatus.VICTORY);
             System.out.println("Valeur actuelle de GameStatus : " + game.getStatus());
+            actualLevel++;
+            ChangeLevel(actualLevel);
 
         }
 
@@ -122,9 +125,10 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         return direction;
     }
 
-    public void ChangeLevel(){
+    public void ChangeLevel(int levelToChange){
         game.setStatus(Game.GameStatus.RUNNING);
         //ajouter le changement de niveau
+        System.out.println("Vous accédez au niveau "+levelToChange);
     }
 
 }
