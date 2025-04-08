@@ -12,4 +12,4 @@ public class NestWasp extends Decor {
         super(position);
     }
 
-}
+    }

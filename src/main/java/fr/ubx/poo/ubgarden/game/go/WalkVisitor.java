@@ -1,7 +1,9 @@
 package fr.ubx.poo.ubgarden.game.go;
 
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.decor.Flowers;
 import fr.ubx.poo.ubgarden.game.go.decor.Tree;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 
 public interface WalkVisitor {
 
@@ -22,7 +24,14 @@ public interface WalkVisitor {
      * @return true if the visitor can walk on the tree, false by default
      */
     default boolean canWalkOn(Tree tree) {
-        return false;
+        return true;
+    }
+
+    default boolean canWalkOn(Grass grass) {
+        return true;
+    }
+    default boolean canWalkOn(Flowers flowers) {
+        return false; // Le jardinier ne peut pas marcher sur les fleurs
     }
 
     // TODO

@@ -62,13 +62,13 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         // Récupérer le décor sur la case cible
         Decor next = game.world().getGrid().get(nextPos);
 
-        // Vérifier si le décor est un des types autorisés
-        if (next instanceof Hedgehog ||next instanceof Grass) {
-            return true;
+        // Vérifier si le jardinier peut marcher sur ce décor
+        if (next != null && !next.walkableBy(this)) {
+            return false;
         }
 
-        // Si ce n'est pas un décor autorisé, on bloque le mouvement
-        return false;
+        // Si c'est un décor autorisé, on permet le mouvement
+        return true;
     }
 
     @Override
