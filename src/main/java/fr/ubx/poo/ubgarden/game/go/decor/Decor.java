@@ -33,6 +33,8 @@ public abstract class Decor extends GameObject implements Walkable, Pickupable {
         return gardener.canWalkOn(this);
     }
 
+
+
     @Override
     public void update(long now) {
         super.update(now);

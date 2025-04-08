@@ -8,6 +8,7 @@ import fr.ubx.poo.ubgarden.game.Position;
 import fr.ubx.poo.ubgarden.game.go.GameObject;
 import fr.ubx.poo.ubgarden.game.go.Pickupable;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
 
 public abstract class Bonus extends GameObject implements Pickupable {
 
@@ -17,6 +18,7 @@ public abstract class Bonus extends GameObject implements Pickupable {
         super(position);
         this.decor = decor;
     }
+
 
     @Override
     public void remove() {

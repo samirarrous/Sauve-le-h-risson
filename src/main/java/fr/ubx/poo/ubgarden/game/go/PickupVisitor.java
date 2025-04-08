@@ -10,7 +10,9 @@ public interface PickupVisitor {
      * @param energyBoost the energy boost to be picked up
      */
     default void pickUp(EnergyBoost energyBoost) {
+
     }
     default void pickUp(Carrots carrots) {
+
     }
 }

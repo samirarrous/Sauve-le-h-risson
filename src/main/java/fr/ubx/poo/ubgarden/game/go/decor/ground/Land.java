@@ -24,6 +24,6 @@ public class Land extends Decor {
 
     @Override
     public int energyConsumptionWalk() {
-        return 1;
+        return 2;
     }
 }

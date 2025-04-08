@@ -11,6 +11,7 @@ import fr.ubx.poo.ubgarden.game.go.GameObject;
 import fr.ubx.poo.ubgarden.game.go.Movable;
 import fr.ubx.poo.ubgarden.game.go.PickupVisitor;
 import fr.ubx.poo.ubgarden.game.go.WalkVisitor;
+import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.*;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
@@ -18,9 +19,10 @@ import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 public class Gardener extends GameObject implements Movable, PickupVisitor, WalkVisitor {
 
     private int actualLevel=1;
-    private final int energy;
+    private int energy ;
     private Direction direction;
     private boolean moveRequested = false;
+
 
     public Gardener(Game game, Position position) {
 
@@ -31,6 +33,13 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public void pickUp(EnergyBoost energyBoost) {
+        this.energy = Math.min(Math.max(this.energy + 20, 0), this.game.configuration().gardenerEnergy());
+
+        // Vérifier si le jeu est perdu en cas d'énergie nulle ou négative
+        if (this.energy <= 0) {
+            game.setStatus(Game.GameStatus.DEFEAT);
+            System.out.println("Game is Loose :(");
+        }
         System.out.println("The Player has pickup an item at the "+energyBoost.getPosition() + "Position ");
 
 
@@ -63,7 +72,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         Decor next = game.world().getGrid().get(nextPos);
 
         // Vérifier si le jardinier peut marcher sur ce décor
-        if (next != null && !next.walkableBy(this)) {
+        if (next != null && !next.walkableBy(this) && this.energy >= next.energyConsumptionWalk()) {
             return false;
         }
 
@@ -76,8 +85,17 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         Position nextPos = direction.nextPosition(getPosition());
         Decor next = game.world().getGrid().get(nextPos);
         setPosition(nextPos);
-        if (next != null)
-            next.pickUpBy(this);
+        this.energy -= next.energyConsumptionWalk();
+
+
+        // Vérifier si le décor contient un bonus
+        if (next != null && next.getBonus() != null) {
+            Bonus bonus = next.getBonus();
+            System.out.println("Found a bonus: " + bonus.getClass().getSimpleName());
+            bonus.pickUpBy(this); // Ramasser le bonus
+            bonus.remove();       // Supprimer le bonus après ramassage
+        }
+
         return nextPos;
     }
 
@@ -115,6 +133,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void hurt(int damage) {
+        this.energy -= damage;
     }
 
     public void hurt() {
