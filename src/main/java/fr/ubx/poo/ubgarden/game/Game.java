@@ -4,7 +4,9 @@ import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
 
 
 public class Game {
-
+    public enum GameStatus {
+        RUNNING, VICTORY, DEFEAT  //game states
+    }
     private final Configuration configuration;
     private final World world;
     private final Gardener gardener;
@@ -15,9 +17,7 @@ public class Game {
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
     }
-    public enum GameStatus {
-        RUNNING, VICTORY, DEFEAT
-    }
+
 
     private GameStatus status = GameStatus.RUNNING;
 

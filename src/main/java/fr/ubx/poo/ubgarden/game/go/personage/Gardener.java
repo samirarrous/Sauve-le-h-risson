@@ -12,7 +12,8 @@ import fr.ubx.poo.ubgarden.game.go.Movable;
 import fr.ubx.poo.ubgarden.game.go.PickupVisitor;
 import fr.ubx.poo.ubgarden.game.go.WalkVisitor;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
-import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.decor.*;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 
 public class Gardener extends GameObject implements Movable, PickupVisitor, WalkVisitor {
 
@@ -51,7 +52,22 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     @Override
     public final boolean canMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
-        return game.world().getGrid().inside(nextPos);
+
+        // Interdire de sortir de la map
+        if (!game.world().getGrid().inside(nextPos)) {
+            return false;
+        }
+
+        // Récupérer le décor sur la case cible
+        Decor next = game.world().getGrid().get(nextPos);
+
+        // Vérifier si le décor est un des types autorisés
+        if (next instanceof Hedgehog ||next instanceof Grass) {
+            return true;
+        }
+
+        // Si ce n'est pas un décor autorisé, on bloque le mouvement
+        return false;
     }
 
     @Override
@@ -106,5 +122,9 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         return direction;
     }
 
+    public void ChangeLevel(){
+        game.setStatus(Game.GameStatus.RUNNING);
+        //ajouter le changement de niveau
+    }
 
 }
