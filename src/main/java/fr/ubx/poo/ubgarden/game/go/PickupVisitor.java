@@ -1,5 +1,6 @@
 package fr.ubx.poo.ubgarden.game.go;
 
+import fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 
 public interface PickupVisitor {
@@ -10,5 +11,6 @@ public interface PickupVisitor {
      */
     default void pickUp(EnergyBoost energyBoost) {
     }
-
+    default void pickUp(Carrots carrots) {
+    }
 }

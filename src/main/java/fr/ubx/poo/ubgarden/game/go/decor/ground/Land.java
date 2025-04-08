@@ -6,13 +6,14 @@ package fr.ubx.poo.ubgarden.game.go.decor.ground;
 
 import fr.ubx.poo.ubgarden.game.Position;
 import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
+import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
 
-public class Grass extends Land {
-    public Grass(Position position) {
+public class Land extends Decor {
+
+    public Land(Position position) {
         super(position);
     }
-
     @Override
     public void pickUpBy(Gardener gardener) {
         Bonus bonus = getBonus();
@@ -20,13 +21,9 @@ public class Grass extends Land {
             bonus.pickUpBy(gardener);
         }
     }
-    public boolean walkableBy(Gardener gardener) {
-        return gardener.canWalkOn(this);
-    }
 
     @Override
     public int energyConsumptionWalk() {
         return 1;
     }
-
 }

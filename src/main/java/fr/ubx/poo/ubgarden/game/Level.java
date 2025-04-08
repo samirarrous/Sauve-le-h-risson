@@ -1,15 +1,17 @@
 package fr.ubx.poo.ubgarden.game;
 
+import fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.*;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
 import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
 import fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashMap;
+
 //ici on ajoute les sprites
 public class Level implements Map {
 
@@ -39,6 +41,7 @@ public class Level implements Map {
                     case Flowers:
                         decors.put(position, new Flowers(position));
                         break;
+
                     case NestWasp:
                         decors.put(position, new NestWasp(position));
                         break;
@@ -48,6 +51,12 @@ public class Level implements Map {
                     case Apple: {
                         Decor grass = new Grass(position);
                         grass.setBonus(new EnergyBoost(position, grass));
+                        decors.put(position, grass);
+                        break;
+                    }
+                    case Carrots: {
+                        Decor grass = new Land(position);
+                        grass.setBonus(new Carrots(position, grass));
                         decors.put(position, grass);
                         break;
                     }

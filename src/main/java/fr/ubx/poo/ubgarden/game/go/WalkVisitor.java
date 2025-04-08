@@ -24,7 +24,7 @@ public interface WalkVisitor {
      * @return true if the visitor can walk on the tree, false by default
      */
     default boolean canWalkOn(Tree tree) {
-        return true;
+        return false;
     }
 
     default boolean canWalkOn(Grass grass) {
