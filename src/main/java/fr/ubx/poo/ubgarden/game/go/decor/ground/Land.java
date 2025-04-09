@@ -14,13 +14,7 @@ public class Land extends Decor {
     public Land(Position position) {
         super(position);
     }
-    @Override
-    public void pickUpBy(Gardener gardener) {
-        Bonus bonus = getBonus();
-        if (bonus != null) {
-            bonus.pickUpBy(gardener);
-        }
-    }
+
 
     @Override
     public int energyConsumptionWalk() {

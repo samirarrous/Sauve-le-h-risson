@@ -22,6 +22,7 @@
     import javafx.scene.text.Text;
     import javafx.scene.text.TextAlignment;
 
+    import java.sql.SQLOutput;
     import java.util.*;
 
 
@@ -167,7 +168,10 @@
             if (gardener.getEnergy() < 0) {
                 gameLoop.stop();
                 showMessage("Perdu!", Color.RED);
-
+            }
+            if (game.getStatus() == Game.GameStatus.VICTORY){
+                gameLoop.stop();
+                showMessage("Gagné!", Color.GREEN);
             }
 
 

@@ -2,6 +2,7 @@ package fr.ubx.poo.ubgarden.game.go;
 
 import fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
+import fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 
 public interface PickupVisitor {
     /**
@@ -13,6 +14,9 @@ public interface PickupVisitor {
 
     }
     default void pickUp(Carrots carrots) {
+
+    }
+    default void pickUp(Hedgehog hedgehog) {
 
     }
 }

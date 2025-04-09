@@ -23,6 +23,14 @@ public abstract class Decor extends GameObject implements Walkable, Pickupable {
     public Bonus getBonus() {
         return bonus;
     }
+    @Override
+    public void pickUpBy(Gardener gardener) {
+        Bonus bonus = getBonus();
+        if (bonus != null) {
+            bonus.pickUpBy(gardener);
+        }
+    }
+
 
     public void setBonus(Bonus bonus) {
         this.bonus = bonus;
