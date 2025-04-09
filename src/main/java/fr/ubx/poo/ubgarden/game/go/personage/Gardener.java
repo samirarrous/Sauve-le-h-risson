@@ -170,6 +170,10 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         this.energy = Math.min(this.energy + recoveryPerSeconds, game.configuration().gardenerEnergy());
         System.out.println("Le joueur récupère de l'énergie : " + this.energy);
     }
+    private void WinGame(){
+        game.setStatus(Game.GameStatus.VICTORY);
+        System.out.println("Game Won !");
+    }
 
 
 }
