@@ -22,6 +22,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     private int energy ;
     private Direction direction;
     private boolean moveRequested = false;
+    private long lastMoveTime = 0; // moment du dernier mouvement
+    private long lastRegenTime = 0; // moment de la dernière régénération
 
 
     public Gardener(Game game, Position position) {
@@ -82,6 +84,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public Position move(Direction direction) {
+
         Position nextPos = direction.nextPosition(getPosition());
         Decor next = game.world().getGrid().get(nextPos);
         setPosition(nextPos);
@@ -100,37 +103,45 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void update(long now) {
+        if (game.getStatus() == Game.GameStatus.RUNNING) {
 
-        if(game.getStatus()==Game.GameStatus.RUNNING){//si le jeu n'est pas perdu/gagné
+            if (moveRequested) {
+                if (canMove(direction)) {
+                    move(direction);
+                    lastMoveTime = now; // Mettre à jour le dernier mouvement
+                }
+            } else {
+                if(energy<100){
+                    // Si le joueur ne bouge pas depuis 1 seconde, régénère l'énergie toutes les secondes
+                    if (now - lastMoveTime >= 1_000_000_000L && now - lastRegenTime >= 1_000_000_000L) {
+                        regainEnergy();
+                        lastRegenTime = now;
+                    }
+                }
 
+            }
 
-        if (moveRequested) {
-            if (canMove(direction)) {
-                move(direction);
+            moveRequested = false;
+
+            // Décor actuel
+            Decor decor = game.world().getGrid().get(getPosition());
+
+            // Check victoire
+            if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
+                System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
+                game.setStatus(Game.GameStatus.VICTORY);
+                actualLevel++;
+                ChangeLevel(actualLevel);
+            }
+
+            // Check défaite
+            if (getEnergy() <= 0) {
+                game.setStatus(Game.GameStatus.DEFEAT);
+                System.out.println("Game is Loose :(");
             }
         }
-        moveRequested = false;
-        Decor decor = game.world().getGrid().get(getPosition());
-
-        // Check if game is WON
-
-
-        if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
-            System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
-            game.setStatus(Game.GameStatus.VICTORY);
-            System.out.println("Valeur actuelle de GameStatus : " + game.getStatus());
-            actualLevel++;
-            ChangeLevel(actualLevel);
-
-        }
-
-        //Check if Game Is Loose
-        if(getEnergy()<=0){
-            game.setStatus(Game.GameStatus.DEFEAT);
-            System.out.println("Game is Loose :(");
-        }
-        }
     }
+
 
     public void hurt(int damage) {
         this.energy -= damage;
@@ -149,5 +160,12 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         //ajouter le changement de niveau
         System.out.println("Vous accédez au niveau "+levelToChange);
     }
+
+    private void regainEnergy() {
+        int recoveryPerSeconds = 5;
+        this.energy = Math.min(this.energy + recoveryPerSeconds, game.configuration().gardenerEnergy());
+        System.out.println("Le joueur récupère de l'énergie : " + this.energy);
+    }
+
 
 }
