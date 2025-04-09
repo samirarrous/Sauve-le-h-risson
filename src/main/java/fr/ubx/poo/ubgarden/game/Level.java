@@ -2,6 +2,7 @@ package fr.ubx.poo.ubgarden.game;
 
 import fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
+import fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import fr.ubx.poo.ubgarden.game.go.decor.*;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
@@ -51,6 +52,12 @@ public class Level implements Map {
                     case Apple: {
                         Decor grass = new Grass(position);
                         grass.setBonus(new EnergyBoost(position, grass));
+                        decors.put(position, grass);
+                        break;
+                    }
+                    case PoisonedApple: {
+                        Decor grass = new Grass(position);
+                        grass.setBonus(new PoisonedApple(position, grass));
                         decors.put(position, grass);
                         break;
                     }

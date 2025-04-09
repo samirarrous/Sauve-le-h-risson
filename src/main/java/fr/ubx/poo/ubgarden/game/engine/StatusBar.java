@@ -77,7 +77,7 @@ public class StatusBar {
 
     public void update(Game game) {
         insecticideNumber.setText("?");
-        diseaseLevel.setText("x?");
+        diseaseLevel.setText(String.valueOf(game.getGardener().getDiseaseLevel()));
         energy.setText(String.valueOf(game.getGardener().getEnergy()));
     }
 
