@@ -46,6 +46,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
     }
+    @Override
+    public void pickUp(Hedgehog hedgehog) {
+        game.setStatus(Game.GameStatus.VICTORY);
+        System.out.println("The Player has won the game");
+
+
+    }
+
 
 
     public int getEnergy() {
@@ -92,11 +100,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
         // Vérifier si le décor contient un bonus
-        if (next != null && next.getBonus() != null) {
-            Bonus bonus = next.getBonus();
-            System.out.println("Found a bonus: " + bonus.getClass().getSimpleName());
-            bonus.pickUpBy(this); // Ramasser le bonus
-            bonus.remove();       // Supprimer le bonus après ramassage
+        if (next != null ) {
+            next.pickUpBy(this); // Ramasser le bonus
+            if ( next.getBonus() != null){
+                Bonus bonus = next.getBonus();
+                System.out.println("Found a bonus: " + bonus.getClass().getSimpleName());
+                bonus.pickUpBy(this); // Ramasser le bonus
+                bonus.remove();       // Supprimer le bonus après ramassage
+            }
         }
 
         return nextPos;
@@ -123,22 +134,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
             moveRequested = false;
 
-            // Décor actuel
-            Decor decor = game.world().getGrid().get(getPosition());
 
-            // Check victoire
-            if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
-                System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
-                game.setStatus(Game.GameStatus.VICTORY);
-                actualLevel++;
-                ChangeLevel(actualLevel);
-            }
-
-            // Check défaite
-            if (getEnergy() <= 0) {
-                game.setStatus(Game.GameStatus.DEFEAT);
-                System.out.println("Game is Loose :(");
-            }
         }
     }
 
