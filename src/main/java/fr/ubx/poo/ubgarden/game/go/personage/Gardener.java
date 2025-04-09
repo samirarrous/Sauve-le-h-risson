@@ -23,7 +23,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     private Direction direction;
     private boolean moveRequested = false;
     private long lastMoveTime = 0; // moment du dernier mouvement
-    private long lastRegenTime = 0; // moment de la dernière régénération
+
 
 
     public Gardener(Game game, Position position) {
@@ -121,16 +121,12 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
                     lastMoveTime = now; // Mettre à jour le dernier mouvement
                 }
             } else {
-                if(energy<100){
-                    // Si le joueur ne bouge pas depuis 1 seconde, régénère l'énergie toutes les secondes
-                    if (now - lastMoveTime >= 1_000_000_000L && now - lastRegenTime >= 1_000_000_000L) {
-                        regainEnergy();
-                        lastRegenTime = now;
-                    }
+                int timer = 1200000;
+                if (now - lastMoveTime >= game.configuration().energyRecoverDuration() * timer && energy < game.configuration().gardenerEnergy()) {
+                    energy = Math.min(energy + 1, game.configuration().gardenerEnergy());
+                    lastMoveTime = now;
                 }
-
             }
-
             moveRequested = false;
 
 
@@ -156,11 +152,6 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         System.out.println("Vous accédez au niveau "+levelToChange);
     }
 
-    private void regainEnergy() {
-        int recoveryPerSeconds = 5;
-        this.energy = Math.min(this.energy + recoveryPerSeconds, game.configuration().gardenerEnergy());
-        System.out.println("Le joueur récupère de l'énergie : " + this.energy);
-    }
 
 
 }
