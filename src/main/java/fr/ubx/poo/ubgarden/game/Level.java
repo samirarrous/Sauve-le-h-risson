@@ -60,6 +60,7 @@ public class Level implements Map {
                         decors.put(position, grass);
                         break;
                     }
+
                     case Hedgehog:
                         decors.put(position, new Hedgehog(position));
                         break;

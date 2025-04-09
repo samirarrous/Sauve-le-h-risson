@@ -22,8 +22,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     private int energy ;
     private Direction direction;
     private boolean moveRequested = false;
-    private long lastMoveTime = 0; // moment du dernier mouvement
-    private long lastRegenTime = 0; // moment de la dernière régénération
+    private long previousTime = 0;             // Pour stocker le temps de la frame précédente (en nanosecondes)
+    private double recoveryAccumulator = 0.0;    // Accumulateur en secondes
 
 
     public Gardener(Game game, Position position) {
@@ -103,44 +103,48 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void update(long now) {
-        if (game.getStatus() == Game.GameStatus.RUNNING) {
+        if (previousTime == 0) {
+            previousTime = now;  // Initialisation à la première frame
+        }
+        // Calcul du temps écoulé depuis la dernière frame en secondes
+        double deltaTime = (now - previousTime) / 1_000_000_000.0;
+        previousTime = now;
 
-            if (moveRequested) {
-                if (canMove(direction)) {
-                    move(direction);
-                    lastMoveTime = now; // Mettre à jour le dernier mouvement
-                }
-            } else {
-                if(energy<100){
-                    // Si le joueur ne bouge pas depuis 1 seconde, régénère l'énergie toutes les secondes
-                    if (now - lastMoveTime >= 1_000_000_000L && now - lastRegenTime >= 1_000_000_000L) {
-                        regainEnergy();
-                        lastRegenTime = now;
-                    }
-                }
-
+        // Si le joueur ne bouge pas, accumuler le temps
+        if (!moveRequested) {
+            recoveryAccumulator += deltaTime;
+            // energyRecoverDuration est en millisecondes (1000 ms => 1 s)
+            if (recoveryAccumulator >= game.configuration().energyRecoverDuration() / 1000.0) {
+                regainEnergy();
+                recoveryAccumulator = 0.0; // On réinitialise l'accumulateur après avoir regagné l'énergie
             }
+        } else {
+            // Si le joueur bouge, réinitialiser l'accumulateur
+            recoveryAccumulator = 0.0;
+        }
 
+        // Traitement du mouvement s'il y a lieu
+        if (moveRequested) {
+            if (canMove(direction)) {
+                move(direction);
+            }
             moveRequested = false;
+        }
 
-            // Décor actuel
-            Decor decor = game.world().getGrid().get(getPosition());
-
-            // Check victoire
-            if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
-                System.out.println("Victoire ! Vous avez retrouvé le hérisson siuuuuuu!");
-                game.setStatus(Game.GameStatus.VICTORY);
-                actualLevel++;
-                ChangeLevel(actualLevel);
-            }
-
-            // Check défaite
-            if (getEnergy() <= 0) {
-                game.setStatus(Game.GameStatus.DEFEAT);
-                System.out.println("Game is Loose :(");
-            }
+        // Vérifications de victoire ou défaite
+        Decor decor = game.world().getGrid().get(getPosition());
+        if (decor instanceof fr.ubx.poo.ubgarden.game.go.decor.Hedgehog) {
+            System.out.println("Victoire ! Vous avez retrouvé le hérisson !");
+            game.setStatus(Game.GameStatus.VICTORY);
+            actualLevel++;
+            ChangeLevel(actualLevel);
+        }
+        if (getEnergy() <= 0) {
+            game.setStatus(Game.GameStatus.DEFEAT);
+            System.out.println("Game over...");
         }
     }
+
 
 
     public void hurt(int damage) {
@@ -162,7 +166,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     private void regainEnergy() {
-        int recoveryPerSeconds = 5;
+        int recoveryPerSeconds = 1;
         this.energy = Math.min(this.energy + recoveryPerSeconds, game.configuration().gardenerEnergy());
         System.out.println("Le joueur récupère de l'énergie : " + this.energy);
     }
