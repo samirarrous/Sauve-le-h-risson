@@ -11,5 +11,9 @@ public class NestWasp extends Decor {
     public NestWasp(Position position) {
         super(position);
     }
+    private long lastSpawnTime = 0;
+    private final long spawnCooldown = 3_000_000_000L; // 3 secondes en nanosecondes
+
+
 
     }
