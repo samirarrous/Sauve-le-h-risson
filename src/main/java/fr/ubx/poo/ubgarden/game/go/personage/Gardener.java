@@ -112,7 +112,6 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
         return nextPos;
     }
-
     public void update(long now) {
         if (game.getStatus() == Game.GameStatus.RUNNING) {
 
